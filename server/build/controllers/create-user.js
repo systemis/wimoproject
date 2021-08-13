@@ -53,7 +53,6 @@ function makeCreateUserController(_a) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         data = lodash_1.default.get(httpRequest, 'context.validated.data');
-                        console.log(data);
                         return [4 /*yield*/, client.verify.services(twilio_config_1.default.SERVICE_ID)
                                 .verificationChecks.create({
                                 to: "+" + data.info.mobile_phone,
@@ -61,7 +60,6 @@ function makeCreateUserController(_a) {
                             })];
                     case 1:
                         response = _a.sent();
-                        console.log('verify response: ', response);
                         if (!response.valid) {
                             return [2 /*return*/, {
                                     headers: { "Content-Type": "application/json", },

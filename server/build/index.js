@@ -125,6 +125,7 @@ var PORT = process.env.port || 3290;
 app.listen(PORT, function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         console.log("server is listening on port " + PORT);
+        create();
         return [2 /*return*/];
     });
 }); });
