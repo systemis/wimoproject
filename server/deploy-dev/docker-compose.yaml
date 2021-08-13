@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+  mongo:
+    hostname: mongo
+    image: mongo:4.0
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: Passw0rd
+      MONGO_REPLICA_SET_NAME: rs0
+    ports:
+      - 27017:27017
