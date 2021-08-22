@@ -15,6 +15,8 @@ app.use(bodyParser.json({ limit: "10mb", strict: true }));
 app.use(bodyParser.urlencoded({ extended: false })); // use queryString library
 app.set("trust proxy", true); // Express sitting behind proxy
 app.use(cors())
+
+app.get('/', (req, res) => res.send('You are catching the wimo server '))
 app.use("/api", userRouter);
 
 makeDb().then(async() => {
@@ -56,6 +58,6 @@ async function vertify(code:string) {
 const PORT = process.env.port || 3290;
 app.listen(PORT, async () => { 
   console.log(`server is listening on port ${PORT}`);
-  // create()
+  create()
   // vertify("078591");
 });

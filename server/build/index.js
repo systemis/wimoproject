@@ -55,6 +55,7 @@ app.use(body_parser_1.default.json({ limit: "10mb", strict: true }));
 app.use(body_parser_1.default.urlencoded({ extended: false })); // use queryString library
 app.set("trust proxy", true); // Express sitting behind proxy
 app.use(cors_1.default());
+app.get('/', function (req, res) { return res.send('You are catching the wimo server '); });
 app.use("/api", api_1.default);
 make_db_1.default().then(function () { return __awaiter(void 0, void 0, void 0, function () {
     var user;
