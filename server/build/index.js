@@ -39,6 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = __importDefault(require("lodash"));
 var express_1 = __importDefault(require("express"));
 var cors_1 = __importDefault(require("cors"));
 var body_parser_1 = __importDefault(require("body-parser"));
@@ -48,6 +49,7 @@ var api_1 = __importDefault(require("./routers/api"));
 var data_access_1 = require("./data-access");
 var twilio_config_1 = __importDefault(require("./twilio-config"));
 var twilio_1 = __importDefault(require("twilio"));
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var client = twilio_1.default(twilio_config_1.default.SID, twilio_config_1.default.TOKEN);
 dotenv_1.default.config();
 var app = express_1.default();
@@ -55,10 +57,9 @@ app.use(body_parser_1.default.json({ limit: "10mb", strict: true }));
 app.use(body_parser_1.default.urlencoded({ extended: false })); // use queryString library
 app.set("trust proxy", true); // Express sitting behind proxy
 app.use(cors_1.default());
-app.get('/', function (req, res) { return res.send('You are catching the wimo server '); });
 app.use("/api", api_1.default);
 make_db_1.default().then(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, account_list, password;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, data_access_1.UserDb.findByEmail({ email: 'systemofpeter@gmail.com' })];
@@ -75,7 +76,24 @@ make_db_1.default().then(function () { return __awaiter(void 0, void 0, void 0, 
             case 2:
                 _a.sent();
                 _a.label = 3;
-            case 3: return [2 /*return*/];
+            case 3:
+                account_list = data_access_1.AccountDB.findAll();
+                if (!!lodash_1.default.size(account_list)) return [3 /*break*/, 6];
+                console.log('account db is empty, creating new account');
+                return [4 /*yield*/, bcrypt_1.default.hash('Profile', bcrypt_1.default.genSaltSync(10))];
+            case 4:
+                password = _a.sent();
+                console.log(password);
+                return [4 /*yield*/, data_access_1.AccountDB.insert({
+                        email: 'tphamdn@gmail.com',
+                        name: 'Pham Van Thinh',
+                        password: password,
+                        posts: [],
+                    })];
+            case 5:
+                _a.sent();
+                _a.label = 6;
+            case 6: return [2 /*return*/];
         }
     });
 }); }).catch(function (err) { return console.error("error when create db: ", err); });
@@ -126,7 +144,6 @@ var PORT = process.env.port || 3290;
 app.listen(PORT, function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         console.log("server is listening on port " + PORT);
-        create();
         return [2 /*return*/];
     });
 }); });

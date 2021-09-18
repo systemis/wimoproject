@@ -35,7 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = __importDefault(require("lodash"));
 function makeGetUsersController(_a) {
     var getUsers = _a.getUsers;
     return function getUsersController(httpRequest) {
@@ -64,7 +68,7 @@ function makeGetUsersController(_a) {
                             },
                             statusCode: 404,
                             body: {
-                                error: error_1.message,
+                                error: lodash_1.default.get(error_1, 'message')
                             },
                         };
                     case 3: return [2 /*return*/];

@@ -1,12 +1,14 @@
+import _ from 'lodash';
 import express, { Response, Request } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import makeDb from './data-access/make-db';
 import userRouter from "./routers/api";
-import { UserDb } from './data-access';
+import { UserDb, AccountDB } from './data-access';
 import twilioConfig from "./twilio-config";
 import twilio from 'twilio';
+import bcrypt from 'bcrypt'
 const client = twilio(twilioConfig.SID, twilioConfig.TOKEN);
 
 dotenv.config();
@@ -15,8 +17,6 @@ app.use(bodyParser.json({ limit: "10mb", strict: true }));
 app.use(bodyParser.urlencoded({ extended: false })); // use queryString library
 app.set("trust proxy", true); // Express sitting behind proxy
 app.use(cors())
-
-app.get('/', (req, res) => res.send('You are catching the wimo server '))
 app.use("/api", userRouter);
 
 makeDb().then(async() => {
@@ -29,6 +29,19 @@ makeDb().then(async() => {
       mobile_phone: '090002', 
       email: 'systemofpeter@gmail.com'
     });
+  }
+
+  const account_list = AccountDB.findAll()
+  if(!_.size(account_list)) {
+    console.log('account db is empty, creating new account')
+    let password = await bcrypt.hash('Profile', bcrypt.genSaltSync(10))
+    console.log(password)
+    await AccountDB.insert({
+      email: 'tphamdn@gmail.com', 
+      name: 'Pham Van Thinh', 
+      password: password, 
+      posts: [], 
+    })
   }
 }).catch((err) => console.error("error when create db: ", err))
 
@@ -58,6 +71,6 @@ async function vertify(code:string) {
 const PORT = process.env.port || 3290;
 app.listen(PORT, async () => { 
   console.log(`server is listening on port ${PORT}`);
-  create()
+  // create()
   // vertify("078591");
 });

@@ -22,7 +22,7 @@ export default function makeGetUsersController({ getUsers } : {getUsers: IGetUse
                 },
                 statusCode: 404,
                 body: {
-                    error: error.message,
+                    error: _.get(error, 'message')
                 },
             }
         }
