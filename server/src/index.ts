@@ -43,8 +43,6 @@ makeDb().then(async() => {
     })
 
     console.log('create new account successfully')
-  }else {
-    console.log('Account Info: ', account_list[0])
   }
 }).catch((err) => console.error("error when create db: ", err))
 
