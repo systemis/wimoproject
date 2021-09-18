@@ -76,12 +76,13 @@ make_db_1.default().then(function () { return __awaiter(void 0, void 0, void 0, 
             case 2:
                 _a.sent();
                 _a.label = 3;
-            case 3:
-                account_list = data_access_1.AccountDB.findAll();
-                if (!!lodash_1.default.size(account_list)) return [3 /*break*/, 6];
+            case 3: return [4 /*yield*/, data_access_1.AccountDB.findAll()];
+            case 4:
+                account_list = _a.sent();
+                if (!!lodash_1.default.size(account_list)) return [3 /*break*/, 7];
                 console.log('account db is empty, creating new account');
                 return [4 /*yield*/, bcrypt_1.default.hash('Profile', bcrypt_1.default.genSaltSync(10))];
-            case 4:
+            case 5:
                 password = _a.sent();
                 console.log(password);
                 return [4 /*yield*/, data_access_1.AccountDB.insert({
@@ -90,10 +91,13 @@ make_db_1.default().then(function () { return __awaiter(void 0, void 0, void 0, 
                         password: password,
                         posts: [],
                     })];
-            case 5:
+            case 6:
                 _a.sent();
-                _a.label = 6;
-            case 6: return [2 /*return*/];
+                return [3 /*break*/, 8];
+            case 7:
+                console.log('Account Info: ', account_list[0]);
+                _a.label = 8;
+            case 8: return [2 /*return*/];
         }
     });
 }); }).catch(function (err) { return console.error("error when create db: ", err); });

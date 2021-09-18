@@ -31,9 +31,8 @@ makeDb().then(async() => {
     });
   }
 
-  const account_list = AccountDB.findAll()
+  const account_list = await AccountDB.findAll()
   if(!_.size(account_list)) {
-    console.log('account db is empty, creating new account')
     let password = await bcrypt.hash('Profile', bcrypt.genSaltSync(10))
     console.log(password)
     await AccountDB.insert({
@@ -42,6 +41,10 @@ makeDb().then(async() => {
       password: password, 
       posts: [], 
     })
+
+    console.log('create new account successfully')
+  }else {
+    console.log('Account Info: ', account_list[0])
   }
 }).catch((err) => console.error("error when create db: ", err))
 
